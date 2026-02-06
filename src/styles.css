@@ -1,0 +1,23 @@
+.linie {
+  color: blue;
+  border-width: 20px;
+}
+.t1 {
+  color:white;
+}
+
+body { background-color: #000080}
+
+.haken {
+  display: none;
+
+}
+
+.haken span{
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
