@@ -19,7 +19,7 @@
   font-family: serif, Calibri;
 }
 
-.box {
+.Selectbox {
   display: flex;
   align-items: center;
   gap: var(--circle-text-gap);
@@ -28,8 +28,7 @@
   margin: 50px 0 50px 0;
 }
 
-
-.t2{
+ .t2 {
   color:white;
   text-decoration: none;
   flex-shrink: 0;
@@ -47,9 +46,24 @@
   margin: 5px 0 5px 0;
 }
 
+.Addbox {
+  display: flex;
+  align-items: center;
+  gap: var(--circle-text-gap);
+  width: 100%;
+  padding: 0;
+  margin: 50px 0 50px 0;
+}
+
+.image {
+  width: 13%;
+}
+
 .t3{
   color:white;
   text-decoration: none;
+  font-size: 5vw;
+  font-family: serif, Calibri;
 }
 
 .zurück{
