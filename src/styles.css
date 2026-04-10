@@ -7,6 +7,9 @@
   --haken-width:calc(var(--circle)/2.666666666666667);
   --hacken-height:calc(var(--circle)/1.6);
   --border-width:calc(var(--circle)/13.34);
+  --selectbox-margin:clamp(0px,3vw,30px);
+  /* --addbox-margin:clamp(15px,5vw,50px); */
+  --addbox-gap:clamp(1px,3vw,50px);
 }
 
 
@@ -25,7 +28,7 @@
   gap: var(--circle-text-gap);
   width: 100%;
   padding: 0;
-  margin: 50px 0 50px 0;
+  margin: var(--selectbox-margin) 0 var(--selectbox-margin) 0;
 }
 
  .t2 {
@@ -37,7 +40,7 @@
   font-family: serif, Calibri;
 }
 
-.Überschrift{
+.Ueberschrift{
 
   align-items: center;
   gap: 10px;
@@ -49,14 +52,27 @@
 .Addbox {
   display: flex;
   align-items: center;
-  gap: var(--circle-text-gap);
+  gap: var(--addbox-gap);
   width: 100%;
   padding: 0;
-  margin: 50px 0 50px 0;
+  /* margin: var(--addbox-margin) 0 var(--addbox-margin) 0; */
+}
+
+.add-link {
+  display: flex;
+  align-items: center;
+  gap: var(--addbox-gap);
+  text-decoration: none;
+  color: white;
+  width: 100%;
+}
+
+.Createbox {
+
 }
 
 .image {
-  width: 13%;
+  width: 9%;
 }
 
 .t3{
@@ -66,7 +82,20 @@
   font-family: serif, Calibri;
 }
 
-.zurück{
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+.zurueck{
   text-decoration: none;
   color:white;
 }
@@ -79,7 +108,7 @@ body { background-color: #000080}
   cursor: pointer;
   gap: 8px;
   flex-shrink: 0;
-  margin: 0 40px 0 30px;
+  margin: 0 var(--selectbox-margin) 0 var(--selectbox-margin);
 }
 
 .haken input {
@@ -115,3 +144,23 @@ hr {
 
 
 
+.create-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  color: white;
+}
+
+.input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.btn {
+  padding: 10px;
+  background-color: #305CDE;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
