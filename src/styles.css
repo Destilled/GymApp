@@ -10,6 +10,7 @@
   --selectbox-margin:clamp(0px,3vw,30px);
   /* --addbox-margin:clamp(15px,5vw,50px); */
   --addbox-gap:clamp(1px,3vw,50px);
+  --createbox-gap:clamp(1px,3vw,50px);
 }
 
 
@@ -68,6 +69,18 @@
 }
 
 .Createbox {
+  background-color: #0047AB;
+  display: flex;
+  align-items: center;
+  gap: var(--createbox-gap);
+  width: 100%;
+  padding: 0;
+}
+
+.Uebunginput {
+  background-color: white;
+  color: white;
+  border-color:white;
 
 }
 
@@ -136,20 +149,16 @@ body { background-color: #000080}
   transform: rotate(45deg);
 }
 
-hr {
+.linie {
   border: 5px solid #305CDE;
   width: 100%;
   margin: 50px 0 50px 0;
 }
 
-
-
-.create-box {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-  color: white;
+.Createline {
+  border: 5px solid #0047AB;
+  width: 100%;
+  margin: 50px 0 50px 0;
 }
 
 .input {
