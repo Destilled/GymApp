@@ -2,11 +2,13 @@ console.log("java loaded");
 
 let allExercises = [];
 
+document.addEventListener("DOMContentLoaded", function() {
+  initalload(); }
+);
 
 window.showUebungErstellenUI = function () {
   const viewCreatebox = document.getElementById("view-createbox");
   const armeaddbox = document.getElementById("armeaddbox");
-  const category = document.body.dataset.category;
 
   const daten = localStorage.getItem("uebungen");
 
@@ -40,39 +42,38 @@ window.showUebungErstellenUI = function () {
     </div>
   `;
 
-  window.save = function () {
-    const input = document.getElementById("uebungName");
-    const name = input.value;
+  loadExercise();
+  showExercise();
+};
 
-    if (name.trim() === "") return;
+window.save = function () {
+  const input = document.getElementById("uebungName");
+  const name = input.value;
+  const category = document.body.dataset.category;
 
-    allExercises.push({
-      name: name,
-      category: category
-    });
+  if (name.trim() === "") return;
 
-    localStorage.setItem("uebungen", JSON.stringify(allExercises));
+  allExercises.push({
+    name: name,
+    category: category
+  });
 
-    input.value = "";
+  localStorage.setItem("uebungen", JSON.stringify(allExercises));
 
-    showExercise();
-  }
+  input.value = "";
 
-  function loadExercise() {
-  const daten = localStorage.getItem("uebungen");
+  showExercise();
+}
 
-   if(daten) {
-     allExercises = JSON.parse(daten);
-   }
-  }
-  function showExercise() {
-    const liste = document.getElementById("liste");
+window.showExercise = function() {
+  const liste = document.getElementById("liste");
+  const category = document.body.dataset.category;
 
-    liste.innerHTML = "";
+  liste.innerHTML = "";
 
-    allExercises
-      .filter(u => u.category === category)
-      .forEach(u => {
+  allExercises
+    .filter(u => u.category === category)
+    .forEach(u => {
       const div = document.createElement("div");
       div.classList.add("Selectbox");
 
@@ -86,6 +87,24 @@ window.showUebungErstellenUI = function () {
 
       liste.appendChild(div);
     });
+}
+
+window.loadExercise = function() {
+  const daten = localStorage.getItem("uebungen");
+
+  if(daten) {
+    allExercises = JSON.parse(daten);
   }
-  loadExercise();
+}
+
+window.clearlist = function() {
+  allExercises = [];
+  localStorage.removeItem("uebungen");
+  console.log("Alles gelöscht");
+  showExercise();
 };
+
+window.initalload = function(){
+  loadExercise();
+  showExercise();
+}
