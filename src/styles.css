@@ -32,6 +32,15 @@
   margin: var(--selectbox-margin) 0 var(--selectbox-margin) 0;
 }
 
+.Taskbox {
+  display: flex;
+  align-items: center;
+  gap: var(--circle-text-gap);
+  width: 100%;
+  padding: 0;
+  margin: var(--selectbox-margin) 0 var(--selectbox-margin) 0;
+}
+
  .t2 {
   color:white;
   text-decoration: none;

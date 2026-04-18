@@ -75,7 +75,8 @@ window.showExercise = function() {
     .filter(u => u.category === category)
     .forEach(u => {
       const div = document.createElement("div");
-      div.classList.add("Selectbox");
+      let counter = 0;
+      div.classList.add("Taskbox");
 
       div.innerHTML = `
       <label class="Checkmark">
@@ -83,7 +84,25 @@ window.showExercise = function() {
         <span></span>
       </label>
       <span class="t1">${u.name}</span>
+      <button onclick="addColumn()">Spalte hinzufügen</button>
+
+        <button onclick="addRow()">Zeile hinzufügen</button>
+
+        <table id="myTable" border="1">
+          <thead>
+            <tr id="headerRow">
+              <th>Spalte 1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td contenteditable="true"></td>
+            </tr>
+          </tbody>
+        </table>
     `;
+      counter++;
+      print(counter);
 
       liste.appendChild(div);
     });
@@ -107,4 +126,19 @@ window.clearlist = function() {
 window.initalload = function(){
   loadExercise();
   showExercise();
+}
+
+function addRow() {
+  const table = document.getElementById("myTable");
+  const headerCells = document.getElementById("headerRow").children;
+
+  const tr = document.createElement("tr");
+
+  for (let i = 0; i < headerCells.length; i++) {
+    const td = document.createElement("td");
+    td.contentEditable = "true";
+    tr.appendChild(td);
+  }
+
+  table.appendChild(tr);
 }
