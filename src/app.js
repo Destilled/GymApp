@@ -33,12 +33,12 @@ window.showExercise = function() {
         <table id="Table${counter}" border="1">
           <thead>
             <tr id="headerRow${counter}">
-              <th>Spalte 1</th>
+              <th>Repeat</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td contenteditable="true"></td>
+              <td>1</td>
             </tr>
           </tbody>
         </table>
@@ -129,15 +129,18 @@ window.showUebungErstellenUI = function () {
 };
 
 
-function addRow(counter) {
-  const headerCells = document.getElementById(`headerRow${counter}`);
-  const tr = document.createElement("tr");
-
+window.addRow = function(counter) {
   const table = document.getElementById(`Table${counter}`);
+  const tbody = table.querySelector("tbody");
 
   const td = document.createElement("td");
-    td.contentEditable = "true";
+  const tr = document.createElement("tr");
 
-    tr.appendChild(td);
-    table.appendChild(tr);
+  const counterrepeat = tbody.querySelectorAll("tr").length +1;
+
+  td.textContent = counterrepeat;
+  td.contentEditable = "true";
+
+  tr.appendChild(td);
+  tbody.appendChild(tr);
 }
