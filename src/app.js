@@ -34,11 +34,13 @@ window.showExercise = function() {
           <thead>
             <tr id="headerRow${counter}">
               <th>Repeat</th>
+              <th>Weight</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1</td>
+              <td contenteditable="true"></td>
             </tr>
           </tbody>
         </table>
@@ -94,6 +96,9 @@ window.showUebungErstellenUI = function () {
 
   const daten = localStorage.getItem("uebungen");
 
+  viewCreatebox.style.display = "block";
+  armeaddbox.style.display = "none";
+
   if(daten) {
     allExercises =JSON.parse(daten);
   }
@@ -104,6 +109,7 @@ window.showUebungErstellenUI = function () {
 
     <div class="Createbox">
     <h2 class="t2">Übung Hinzufügen</h2>
+    <button onclick="closeUebungErstellenUI()">Schließen</button>
     </div>
 
     <div class="Createbox">
@@ -133,8 +139,10 @@ window.addRow = function(counter) {
   const table = document.getElementById(`Table${counter}`);
   const tbody = table.querySelector("tbody");
 
-  const td = document.createElement("td");
   const tr = document.createElement("tr");
+  const td = document.createElement("td");
+  const td2 = document.createElement("td");
+  td2.contentEditable = "true";
 
   const counterrepeat = tbody.querySelectorAll("tr").length +1;
 
@@ -142,5 +150,14 @@ window.addRow = function(counter) {
   td.contentEditable = "true";
 
   tr.appendChild(td);
+  tr.appendChild(td2);
   tbody.appendChild(tr);
-}
+};
+
+window.closeUebungErstellenUI = function() {
+  const viewCreatebox = document.getElementById("view-createbox");
+  const armeaddbox = document.getElementById("armeaddbox");
+
+  viewCreatebox.style.display = "none";
+  armeaddbox.style.display = "block";
+};
