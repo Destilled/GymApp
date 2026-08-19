@@ -17,36 +17,71 @@ window.showExercise = function() {
     .forEach(u => {
       const div = document.createElement("div");
       counter++;
-      console.log(counter);
 
       div.classList.add("Taskbox");
 
       div.innerHTML = `
+
       <label class="Checkmark">
         <input type="checkbox">
         <span></span>
       </label>
+
+      <img
+      src="${u.image || "/src/Images/NoImage.png"}"
+      alt="Image not found"
+      class="image"
+      onclick="document.getElementById('ImageInput${counter}').click()">
+
+      <input
+      type="file"
+      id="ImageInput${counter}"
+      accept="image/*"
+      style="display: none;"
+      onchange="loadImage(event, '${u.id}')" >
+
       <span class="t1">${u.name}</span>
 
-        <button onclick="addRow(${counter})">Zeile hinzufügen</button>
+        <button onclick="addRow('${u.id}', ${counter})">
+        Zeile hinzufügen</button>
 
-        <table id="Table${counter}" border="1">
-          <thead>
-            <tr id="headerRow${counter}">
-              <th>Repeat</th>
-              <th>Weight</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td contenteditable="true"></td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="display: flex; align-items: flex-start;">
+          <table id="Table${counter}" border="1">
+            <thead>
+              <tr id="headerRow${counter}">
+                <th>Repeat</th>
+                <th>Weight</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+            ${u.rows.map((row, rowIndex) =>`
+              <tr>
+                <td>${row.repeat}</td>
+
+                <td
+                contenteditable="true"
+                oninput="saveCell( '${u.id}', ${rowIndex}, 'weight', this)">
+                  ${row.weight}</td>
+
+                <td contenteditable="true"
+                oninput="saveCell( '${u.id}', ${rowIndex}, 'amount', this)">
+                  ${row.amount}</td>
+              </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <button onclick="deleteRow('${u.id}', ${counter})">
+            Zeile Löschen
+          </button>
+        </div>
+
+        <button onclick="deleteExercise('${u.id}')">
+        Übung Löschen
+        </button>
     `;
-
-
 
       liste.appendChild(div);
     });
@@ -67,8 +102,17 @@ window.save = function () {
   if (name.trim() === "") return;
 
   allExercises.push({
+    id: crypto.randomUUID(),
     name: name,
-    category: category
+    category: category,
+    image: "",
+    rows: [
+      {
+        repeat: 1,
+        weight: "",
+        amount: ""
+      }
+    ]
   });
 
   localStorage.setItem("uebungen", JSON.stringify(allExercises));
@@ -135,24 +179,90 @@ window.showUebungErstellenUI = function () {
 };
 
 
-window.addRow = function(counter) {
+window.addRow = function(id, counter) {
   const table = document.getElementById(`Table${counter}`);
   const tbody = table.querySelector("tbody");
 
   const tr = document.createElement("tr");
+
   const td = document.createElement("td");
   const td2 = document.createElement("td");
-  td2.contentEditable = "true";
+  const td3 = document.createElement("td");
 
   const counterrepeat = tbody.querySelectorAll("tr").length +1;
 
+  td2.contentEditable = "true";
+  td3.contentEditable = "true";
+
   td.textContent = counterrepeat;
-  td.contentEditable = "true";
+
+  const rowIndex = counterrepeat -1;
+
+  td2.setAttribute(
+    "oninput",
+    `saveCell( '${id}', ${rowIndex}, 'weight', this)`
+  );
+
+  td3.setAttribute(
+    "oninput",
+    `saveCell( '${id}', ${rowIndex}, 'amount', this)`
+  );
 
   tr.appendChild(td);
   tr.appendChild(td2);
+  tr.appendChild(td3);
   tbody.appendChild(tr);
+
+
+  const exercise = allExercises.find(
+    u => u.id === id
+  );
+
+  exercise.rows.push({
+    repeat: counterrepeat,
+    weight: "",
+    amount: ""
+  });
+
+  localStorage.setItem("uebungen",JSON.stringify(allExercises));
 };
+
+
+window.deleteRow = function(id, counter){
+    const table = document.getElementById(`Table${counter}`);
+    const tbody = table.querySelector("tbody");
+
+    if (tbody.querySelectorAll("tr").length <= 1) {
+      return;
+    }
+
+    tbody.removeChild(tbody.lastElementChild);
+
+    const exercise = allExercises.find(
+      u => u.id === id
+    );
+
+    exercise.rows.pop();
+
+    localStorage.setItem(
+      "uebungen",
+      JSON.stringify(allExercises)
+    );
+};
+
+
+
+window.saveCell = function(id,rowIndex,property,cell) {
+
+  const exercise = allExercises.find(
+    u => u.id === id
+  );
+
+  exercise.rows[rowIndex][property] = cell.textContent;
+
+  localStorage.setItem("uebungen", JSON.stringify(allExercises));
+}
+
 
 window.closeUebungErstellenUI = function() {
   const viewCreatebox = document.getElementById("view-createbox");
@@ -161,3 +271,44 @@ window.closeUebungErstellenUI = function() {
   viewCreatebox.style.display = "none";
   armeaddbox.style.display = "block";
 };
+
+
+window.loadImage = function(event, id) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const image = event.target.previousElementSibling;
+  image.src = URL.createObjectURL(file);
+
+  const exercise = allExercises.find(
+    u => u.id === id
+  );
+
+  const reader = new FileReader();
+
+  reader.onload = function() {
+    exercise.image = reader.result;
+
+    localStorage.setItem(
+      "uebungen",
+      JSON.stringify(allExercises)
+    );
+  };
+
+  reader.readAsDataURL(file);
+};
+
+
+window.deleteExercise = function(id) {
+
+  allExercises = allExercises.filter(
+    u => u.id !== id
+  )
+
+  localStorage.setItem(
+    "uebungen",
+    JSON.stringify(allExercises)
+  );
+
+  showExercise();
+}
