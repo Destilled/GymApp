@@ -14,6 +14,7 @@ window.showExercise = function() {
 
   allExercises
     .filter(u => u.category === category)
+    .sort((a, b) => a.name.localeCompare(b.name))
     .forEach(u => {
       const div = document.createElement("div");
       counter++;
@@ -23,7 +24,7 @@ window.showExercise = function() {
       div.innerHTML = `
 
       <label class="Checkmark">
-        <input type="checkbox">
+        <input type="checkbox" data-id="${u.id}">
         <span></span>
       </label>
 
@@ -82,10 +83,92 @@ window.showExercise = function() {
         Übung Löschen
         </button>
     `;
-
       liste.appendChild(div);
     });
+  const addButton = document.createElement("button");
+
+  addButton.textContent = "Übungen zum Trainingsplan hinzufügen";
+  addButton.onclick = addSelectedExercises;
+
+  liste.appendChild(addButton);
 }
+
+
+window.loadSelectedExercise = function(){
+
+  const selectedData = localStorage.getItem("selectedExercise_Arme");
+
+  if(!selectedData) {
+    return;
+  }
+
+  const selectedIds = JSON.parse(selectedData);
+
+  const selectedExercises = allExercises.filter(
+    exercise => selectedIds.includes(exercise.id)
+  );
+
+  console.log("Ausgewählte Übungen:", selectedExercises);
+
+  const exerciseContainer = document.getElementById("exercise");
+
+  exerciseContainer.innerHTML = "";
+
+  selectedExercises.forEach((exercise, index) => {
+    const div = document.createElement("div");
+
+    div.classList.add("Taskbox");
+
+    div.innerHTML = `
+      <img
+        src="${exercise.image || "/src/Images/NoImage.png"}"
+        alt="Image not found"
+        class="image">
+
+        <span class="t1">${exercise.name}</span>
+            <table id="SelectedTable${index}" border="1">
+              <thead>
+                <tr>
+                  <th>Repeat</th>
+                  <th>Weight</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+
+              <tbody>
+              ${exercise.rows.map(row =>`
+                <tr>
+                  <td>${row.repeat}</td>
+                  <td>${row.weight}</td>
+                  <td>${row.amount}</td>
+                </tr>
+                `).join("")}
+              </tbody>
+            </table>
+`;
+    exerciseContainer.appendChild(div);
+  });
+};
+
+
+window.addSelectedExercises = function() {
+  const selected =[
+    ...document.querySelectorAll(
+      '#liste input[type="checkbox"]:checked'
+    )
+  ];
+
+  const selectedIds = selected.map(
+    checkbox => checkbox.dataset.id
+  );
+
+  localStorage.setItem(
+    "selectedExercise_Arme",
+    JSON.stringify(selectedIds)
+  );
+
+  window.location.href = "TrainingsplanArme.html";
+};
 
 window.clearlist = function() {
   allExercises = [];
@@ -131,7 +214,14 @@ window.loadExercise = function() {
 
 window.initalload = function(){
   loadExercise();
-  showExercise();
+
+  if (document.getElementById("liste")) {
+    showExercise();
+  }
+
+  if(document.getElementById("exercise")) {
+    loadSelectedExercise();
+  }
 }
 
 window.showUebungErstellenUI = function () {
